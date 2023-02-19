@@ -41,8 +41,49 @@ const createUser = async (req, res) => {
     }
 }
 
+const userLogin = async (req, res) => {
+    try {
+        const { username, password } = req.body
+        console.log(username)
+        const user = await User.findOne({where: {username: username}})
+        if (!user) {
+            const response = {
+                success: false,
+                status: "Not found",
+                message: `User with username "${username}" does not exist in the DB!`
+            }
+            return res.status(404).send(response)
+        }
+        else {
+            hashedPassword = user.password
+            if (await bcrypt.compare(password, hashedPassword)) {
+                const response = {
+                    success: true,
+                    status: "Success",
+                    message: "User Logged in Successfuly!"
+                }
+                return res.status(200).send(response)
+            }
+            else {
+                const response = {
+                    success: false,
+                    status: "Bad Request",
+                    message: "Password Mismatch, Please check your password and try again!"
+                }
+                return res.status(400).send(response)
+            }
+        }
+    } catch (error) {
+        console.log(error)
+        return res.status(500).send({
+            message: "Internal Server Error"
+        })
+    }
+}
+
 const userServices = {
-    createUser: createUser
+    createUser: createUser,
+    userLogin: userLogin
 }
 
 module.exports = userServices
