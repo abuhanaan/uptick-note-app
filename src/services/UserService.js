@@ -1,5 +1,6 @@
 const bcrypt = require("bcrypt")
 const User = require("../models/user")
+const generateAccessToken = require("../utils/generateAccessToken")
 
 const createUser = async (req, res) => {
     try {
@@ -57,10 +58,14 @@ const userLogin = async (req, res) => {
         else {
             hashedPassword = user.password
             if (await bcrypt.compare(password, hashedPassword)) {
+                const token = generateAccessToken({user: user})
                 const response = {
                     success: true,
                     status: "Success",
-                    message: "User Logged in Successfuly!"
+                    message: "User Logged in Successfuly!",
+                    data: {
+                        token: token
+                    }
                 }
                 return res.status(200).send(response)
             }
