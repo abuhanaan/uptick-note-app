@@ -3,10 +3,12 @@ const sequelize = require("./db/connect")
 const app = require('./app')
 
 // Import Routers
+const userRouter = require("./routers/UserApi")
 
 const port = process.env.PORT || 7000
 
 // App Routers
+app.use('/api/v1', userRouter)
 
 
 async function startDatabase() {
