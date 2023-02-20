@@ -182,12 +182,53 @@ const updateNote = async (req, res) => {
     }
 }
 
+const deleteNote = async (req, res) => {
+    try {
+        const noteId = req.params.id
+        const currentUser = req.user.user.username
+        const note = await Note.findOne({where: {id: noteId}})
+        if (!note) {
+            const response = {
+                success: false,
+                status: "Not found",
+                message: "The note you intend to delete does not exist"
+            }
+            return res.status(404).send(response)
+        }
+        else{
+            if (note.author !== currentUser) {
+                const response = {
+                    success: false,
+                    status: "Authorization not granted",
+                    message: `You are not authorized to update this note as you are not the autor`
+                }
+                return res.status(401).send(response)
+            }
+            else{
+                await note.destroy()
+                const response = {
+                    success: true,
+                    status: "operation successful",
+                    message: "Note was deleted successfuly"
+                }
+                return res.status(200).send(response)
+            }
+        }
+    } catch (error) {
+        console.log(error)
+        return res.status(500).send({
+            message: "Internal Server Error"
+        }) 
+    }
+}
+
 const noteServices = {
     createNote: createNote,
     getNote: getNote,
     getAllNotes: getAllNotes,
     getAllMyNotes: getAllMyNotes,
-    updateNote: updateNote
+    updateNote: updateNote,
+    deleteNote: deleteNote
 }
 
 module.exports = noteServices

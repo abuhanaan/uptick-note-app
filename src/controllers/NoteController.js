@@ -31,12 +31,19 @@ const updateMyNote = async(req, res) => {
     return response
 }
 
+const deleteNoteById = async(req, res) => {
+    const response = await noteServices.deleteNote(req, res)
+
+    return response
+}
+
 const noteControllers = {
     creatNote: creatNote,
     fetchNoteById: fetchNoteById,
     fetchAllNotes: fetchAllNotes,
     fetchAllMyNotes: fetchAllMyNotes,
-    updateMyNote: updateMyNote
+    updateMyNote: updateMyNote,
+    deleteNoteById: deleteNoteById
 }
 
 module.exports = noteControllers
