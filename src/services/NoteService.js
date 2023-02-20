@@ -141,11 +141,53 @@ const getAllMyNotes = async(req, res) => {
     }
 }
 
+const updateNote = async (req, res) => {
+    try {
+        const { id, content } = req.body
+        const currentUser = req.user.user.username
+        const note = await Note.findOne({where: {id: id}})
+
+        if (!note) {
+            const response = {
+                success: false,
+                status: "not found",
+                message: `The note with id ${id} does not exist`
+            }
+            return res.status(404).send(response)
+        }
+        else {
+            if (note.author !== currentUser) {
+                const response = {
+                    success: false,
+                    status: "Authorization not granted",
+                    message: `You are not authorized to update this note as you are not the autor`
+                }
+                return res.status(401).send(response)
+            }
+            else{
+                await note.update({content: content})
+                const response = {
+                    success: true,
+                    status: "Update Successful",
+                    message: `Your note was updated successfully`
+                }
+                return res.status(200).send(response)
+            }
+        }
+    } catch (error) {
+        console.log(error)
+        return res.status(500).send({
+            message: "Internal Server Error"
+        })
+    }
+}
+
 const noteServices = {
     createNote: createNote,
     getNote: getNote,
     getAllNotes: getAllNotes,
-    getAllMyNotes: getAllMyNotes
+    getAllMyNotes: getAllMyNotes,
+    updateNote: updateNote
 }
 
 module.exports = noteServices

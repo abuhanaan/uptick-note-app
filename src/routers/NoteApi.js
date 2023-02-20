@@ -12,4 +12,7 @@ router.get('/notes/:id', noteControllers.fetchNoteById)
 router.get('/notes', noteControllers.fetchAllNotes)
 router.get('/mynotes',validateToken, noteControllers.fetchAllMyNotes)
 
+// update operation
+router.put('/updatenote', validateToken, noteControllers.updateMyNote)
+
 module.exports = router

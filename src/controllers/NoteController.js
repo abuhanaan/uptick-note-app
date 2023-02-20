@@ -1,3 +1,4 @@
+const { response } = require("../app");
 const noteServices = require("../services/NoteService");
 
 const creatNote = async (req, res) => {
@@ -24,11 +25,18 @@ const fetchAllMyNotes = async (req, res) => {
     return response
 }
 
+const updateMyNote = async(req, res) => {
+    const response = await noteServices.updateNote(req, res)
+
+    return response
+}
+
 const noteControllers = {
     creatNote: creatNote,
     fetchNoteById: fetchNoteById,
     fetchAllNotes: fetchAllNotes,
-    fetchAllMyNotes: fetchAllMyNotes
+    fetchAllMyNotes: fetchAllMyNotes,
+    updateMyNote: updateMyNote
 }
 
 module.exports = noteControllers
