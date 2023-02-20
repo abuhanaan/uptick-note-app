@@ -1,8 +1,9 @@
 const jwt = require("jsonwebtoken")
 
-function validateToken (req, res, next) {
+const validateToken = async (req, res, next) => {
     const authHeader = req.headers["authorization"]
-    const token = authHeader.split(" ")
+    const auth_arr = authHeader.split(" ")
+    token = auth_arr[1]
     if (token == null) {
         return res.status(400).send({
             success: false,
@@ -12,6 +13,7 @@ function validateToken (req, res, next) {
     }
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) =>  {
         if (err) {
+            console.log(err)
             return res.status(403).send({
                 success: false,
                 status: "Invalid Token",
@@ -20,6 +22,7 @@ function validateToken (req, res, next) {
         }
         else {
             req.user = user
+            // console.log(req.user)
             next() //proceed to the next action in the calling function
         }
     })

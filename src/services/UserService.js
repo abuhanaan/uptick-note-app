@@ -1,11 +1,11 @@
 const bcrypt = require("bcrypt")
 const User = require("../models/user")
-const generateAccessToken = require("../utils/generateAccessToken")
+const generateAccessToken = require("../utils/generateAccessToken.js")
 
 const createUser = async (req, res) => {
     try {
         const { username, password } = req.body
-        console.log(password)
+        // console.log(password)
         const hashedPassword = await bcrypt.hash(password, 10)
 
         const existingUser = await User.findOne({where: {username: username}})
