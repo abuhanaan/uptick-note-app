@@ -6,8 +6,29 @@ const creatNote = async (req, res) => {
     return response
 }
 
+const fetchNoteById = async (req, res) => {
+    const response = await noteServices.getNote(req, res)
+
+    return response
+}
+
+const fetchAllNotes = async (req, res) => {
+    const response = await noteServices.getAllNotes(req, res)
+
+    return response
+}
+
+const fetchAllMyNotes = async (req, res) => {
+    const response = await noteServices.getAllMyNotes(req, res)
+
+    return response
+}
+
 const noteControllers = {
-    creatNote: creatNote
+    creatNote: creatNote,
+    fetchNoteById: fetchNoteById,
+    fetchAllNotes: fetchAllNotes,
+    fetchAllMyNotes: fetchAllMyNotes
 }
 
 module.exports = noteControllers

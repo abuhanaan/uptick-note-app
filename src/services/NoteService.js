@@ -30,10 +30,122 @@ const createNote = async (req, res) => {
     }
 }
 
+const getNote = async (req, res) => {
+    try {
+        const noteId = req.params.id
+        const note = await Note.findOne({where: {id: noteId}})
+        if (!note) {
+            const response = {
+                success: false,
+                status: "Not found",
+                message: "This note is not found in the DB"
+            }
+            return res.status(404).send(response)
+        }
+        else{
+            const response = {
+                success: true,
+                status: "operation successful",
+                message: "Note was recovered successfuly",
+                data: {
+                    id: note.id,
+                    author: note.author,
+                    title: note.title,
+                    content: note.content
+                }
+            }
+            return res.status(200).send(response)
+        }
+    } catch (error) {
+        console.log(error)
+        return res.status(500).send({
+            message: "Internal Server Error"
+        })
+    }
+}
 
+const getAllNotes = async (req, res) => {
+    try {
+        const notes = await Note.findAll()
+        if (notes.length == 0) {
+            const response = {
+                success: false,
+                status: "Not found",
+                message: "The note table is empty"
+            }
+            return res.status(404).send(response)
+        }
+        else {
+            const notes_arr = []
+            notes.forEach(element => {
+                const note = {
+                    id: element.id,
+                    author: element.author,
+                    title: element.title,
+                    content: element.content
+                }
+                notes_arr.push(note)
+            });
+            const response = {
+                success: true,
+                status: "operation successful",
+                message: "Notes were recovered successfuly",
+                data: notes_arr
+            }
+            return res.status(200).send(response)
+        }
+    } catch (error) {
+        console.log(error)
+        return res.status(500).send({
+            message: "Internal Server Error"
+        })
+    }
+}
+
+const getAllMyNotes = async(req, res) => {
+    try {
+        const currentUser = req.user.user.username
+        const allMyNotes = await Note.findAll({where: {author: currentUser}})
+        if (allMyNotes.length == 0) {
+            const response = {
+                success: false,
+                status: "Not found",
+                message: "You have not created any note yet!"
+            }
+            return res.status(404).send(response)
+        }
+        else{
+            const notes_arr = []
+            allMyNotes.forEach(element => {
+                const note = {
+                    id: element.id,
+                    author: element.author,
+                    title: element.title,
+                    content: element.content
+                }
+                notes_arr.push(note)
+            });
+            const response = {
+                success: true,
+                status: "operation successful",
+                message: "Your notes were recovered successfuly",
+                data: notes_arr
+            }
+            return res.status(200).send(response)
+        }
+    } catch (error) {
+        console.log(error)
+        return res.status(500).send({
+            message: "Internal Server Error"
+        })
+    }
+}
 
 const noteServices = {
-    createNote: createNote
+    createNote: createNote,
+    getNote: getNote,
+    getAllNotes: getAllNotes,
+    getAllMyNotes: getAllMyNotes
 }
 
 module.exports = noteServices
