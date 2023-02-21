@@ -7,7 +7,7 @@ const createNote = async (req, res) => {
         if (existingNote) {
             const response = {
                 success: false,
-                status: "Conflict Operation",
+                error: "Conflict Operation",
                 message: `Note with title "${title}" already exist in the DB, please choose a different title and try again!`
             }
             return res.status(409).send(response)
@@ -37,7 +37,7 @@ const getNote = async (req, res) => {
         if (!note) {
             const response = {
                 success: false,
-                status: "Not found",
+                error: "Not found",
                 message: "This note is not found in the DB"
             }
             return res.status(404).send(response)
@@ -70,7 +70,7 @@ const getAllNotes = async (req, res) => {
         if (notes.length == 0) {
             const response = {
                 success: false,
-                status: "Not found",
+                error: "Not found",
                 message: "The note table is empty"
             }
             return res.status(404).send(response)
@@ -109,7 +109,7 @@ const getAllMyNotes = async(req, res) => {
         if (allMyNotes.length == 0) {
             const response = {
                 success: false,
-                status: "Not found",
+                error: "Not found",
                 message: "You have not created any note yet!"
             }
             return res.status(404).send(response)
@@ -150,7 +150,7 @@ const updateNote = async (req, res) => {
         if (!note) {
             const response = {
                 success: false,
-                status: "not found",
+                error: "not found",
                 message: `The note with id ${id} does not exist`
             }
             return res.status(404).send(response)
@@ -159,7 +159,7 @@ const updateNote = async (req, res) => {
             if (note.author !== currentUser) {
                 const response = {
                     success: false,
-                    status: "Authorization not granted",
+                    error: "Authorization not granted",
                     message: `You are not authorized to update this note as you are not the autor`
                 }
                 return res.status(401).send(response)
@@ -190,7 +190,7 @@ const deleteNote = async (req, res) => {
         if (!note) {
             const response = {
                 success: false,
-                status: "Not found",
+                error: "Not found",
                 message: "The note you intend to delete does not exist"
             }
             return res.status(404).send(response)
@@ -199,7 +199,7 @@ const deleteNote = async (req, res) => {
             if (note.author !== currentUser) {
                 const response = {
                     success: false,
-                    status: "Authorization not granted",
+                    error: "Authorization not granted",
                     message: `You are not authorized to update this note as you are not the autor`
                 }
                 return res.status(401).send(response)

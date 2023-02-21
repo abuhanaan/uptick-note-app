@@ -12,7 +12,7 @@ const createUser = async (req, res) => {
         if (existingUser) {
             const response = {
                 success: false,
-                status: "Conflict Operation",
+                error: "Conflict Operation",
                 message: `Username "${username}" already exist in the DB, please choose a different one and try again!`
             }
             return res.status(409).send(response)
@@ -50,7 +50,7 @@ const userLogin = async (req, res) => {
         if (!user) {
             const response = {
                 success: false,
-                status: "Not found",
+                error: "Not found",
                 message: `User with username "${username}" does not exist in the DB!`
             }
             return res.status(404).send(response)
