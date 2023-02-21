@@ -1,4 +1,6 @@
 # Take-Home Project For Backend Development Track
+## API Documentaion:
+The API Docuentaton of this project can be accessed [here](API-DOCs.md)
 ## ➔ Project topic: 
 Build and deploy a simple API backend that allows users to create, read, update and delete notes. It should include a login system and the ability to save notes to a remote database. This can be built using any popular framework of your choice e.g Node.js, Laravel, Django etc..
 ###
